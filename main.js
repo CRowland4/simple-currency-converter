@@ -1,23 +1,37 @@
 const input = require('sync-input');
-
-function main() {
-    const oneUSD = {
+const oneUSD = {
         USD: 1,
         JPY: 113.5,
         EUR: 0.89,
         RUB: 74.36,
         GBP: 0.75
     }
+
+function main() {
     console.log("Welcome to Currency Converter!");
     for (const [currency, rate] of Object.entries(oneUSD)) {
         console.log(`1 USD equals ${rate} ${currency}`);
     }
 
-    doConversion(oneUSD);
+    while (true) {
+        console.log("What do you want to do?");
+        console.log("1-Convert currencies 2-Exit program");
+        let action = input();
+
+        if (action === "1") {
+            doConversion();
+        } else if (action === "2") {
+            console.log("Have a nice day!");
+            return
+        } else {
+            console.log("Unknown input");
+        }
+
+    }
 }
 
 
-function getCurrency(oneUSD, prompt) {
+function getCurrency(prompt) {
     const currency = input(prompt).toUpperCase();
     if (!Object.keys(oneUSD).includes(currency)) {
         console.log("Unknown currency");
@@ -28,13 +42,13 @@ function getCurrency(oneUSD, prompt) {
 }
 
 
-function doConversion(oneUSD) {
+function doConversion() {
     console.log("What do you want to convert?");
-    const from = getCurrency(oneUSD, "From: ");
+    const from = getCurrency("From: ");
     if (!from) {
         return
     }
-    const to = getCurrency(oneUSD, "To: ");
+    const to = getCurrency("To: ");
     if (!to) {
         return
     }
@@ -48,11 +62,11 @@ function doConversion(oneUSD) {
         return
     }
 
-    console.log(`Result: ${amount} ${from} equals ${calculateConversion(oneUSD, from, to, amount)} ${to}`);
+    console.log(`Result: ${amount} ${from} equals ${calculateConversion(from, to, amount)} ${to}`);
 }
 
 
-function calculateConversion(oneUSD, from, to, amount) {
+function calculateConversion(from, to, amount) {
     return ((oneUSD[to] / oneUSD[from]) * amount).toFixed(4);
 }
 
