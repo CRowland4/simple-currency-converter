@@ -13,17 +13,29 @@ function main() {
         console.log(`1 USD equals ${rate} ${currency}`);
     }
 
-    console.log("I can convert USD to these currencies: JPY, EUR, RUB, USD, GBP");
     doConversion(oneUSD);
+}
 
+
+function getCurrency(oneUSD, prompt) {
+    const currency = input(prompt).toUpperCase();
+    if (!Object.keys(oneUSD).includes(currency)) {
+        console.log("Unknown currency");
+        return
+    }
+
+    return currency.toUpperCase();
 }
 
 
 function doConversion(oneUSD) {
-    console.log("Type the currency you wish to convert: USD");
-    const to = input("To: ").toUpperCase();
-    if (!Object.keys(oneUSD).includes(to)) {
-        console.log("Unknown currency");
+    console.log("What do you want to convert?");
+    const from = getCurrency(oneUSD, "From: ");
+    if (!from) {
+        return
+    }
+    const to = getCurrency(oneUSD, "To: ");
+    if (!to) {
         return
     }
 
@@ -36,9 +48,12 @@ function doConversion(oneUSD) {
         return
     }
 
-    console.log(`Result: ${amount} USD equals ${(oneUSD[to] * amount).toFixed(4)} ${to}`);
+    console.log(`Result: ${amount} ${from} equals ${calculateConversion(oneUSD, from, to, amount)} ${to}`);
 }
 
 
-main();
+function calculateConversion(oneUSD, from, to, amount) {
+    return ((oneUSD[to] / oneUSD[from]) * amount).toFixed(4);
+}
 
+main();
